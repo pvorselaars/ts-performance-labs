@@ -1,0 +1,9 @@
+{
+  "name": "l0-01-activity-feed",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "measure": "node ../../../../src/lab-cli/cli.ts run L0-01",
+    "profile": "node ../../../../src/lab-cli/cli.ts profile L0-01"
+  }
+}

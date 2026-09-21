@@ -1,0 +1,79 @@
+site_name: TypeScript & Angular Performance Lab
+site_description: "TypeScript and Angular performance, basics to mastery"
+site_url: https://pvorselaars.github.io/ts-performance-labs/
+repo_url: https://github.com/pvorselaars/ts-performance-labs
+repo_name: pvorselaars/ts-performance-labs
+edit_uri: edit/main/
+
+docs_dir: ..
+site_dir: ../../ts-performance-labs-site
+
+theme:
+  name: material
+  icon:
+    logo: material/rocket-launch
+  favicon: material/rocket-launch
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.path
+    - toc.follow
+    - search.suggest
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - fenced_code
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+
+# This is a code repo, not a docs/ folder: docs_dir is the repo root so every
+# README.md, HINTS.md and SOLUTION.md is picked up in place and relative links
+# between them keep working unchanged. Everything that isn't reading material
+# is excluded below. If you add a new top-level folder that shouldn't be
+# published (another source dir, another tool config), add it here too.
+# MkDocs excludes a root-level /templates/ folder by default (it's the
+# conventional Jinja2 theme-override directory) — un-exclude ours, which is
+# just our LAB-LOG.md/POSTMORTEM.md fill-in templates, not a theme override.
+exclude_docs: |
+  !/templates/
+  .git/**
+  .github/**
+  .claude/**
+  .mkdocs/**
+  .vs/**
+  .idea/**
+  .vscode/**
+  .venv-docs/**
+  .profiles/**
+  node_modules/**
+  **/node_modules/**
+  src/**
+  scripts/**
+  requirements-docs.txt
+  package.json
+  package-lock.json
+  **/package.json
+  tsconfig*.json
+  .nvmrc
+  *.ts
+  **/*.ts

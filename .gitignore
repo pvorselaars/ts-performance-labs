@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.lab/
+.profiles/
+.idea/
+.vs/
+.vscode/*
+!.vscode/launch.json
+*.cpuprofile
+*.heapprofile
+*.heapsnapshot
+*.nettrace
+site/
+.venv-docs/

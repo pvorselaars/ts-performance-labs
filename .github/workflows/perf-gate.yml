@@ -1,0 +1,14 @@
+name: perf-gate
+on:
+  pull_request:
+    paths: ['src/**', 'scripts/**', 'levels/**', 'package.json', 'tsconfig*.json']
+jobs:
+  gate:
+    runs-on: ubuntu-latest        # shared runner: time budgets can be noisy. The harness skips them (exit 3, retried) when its calibration says so; allocation budgets are deterministic.
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - name: Perf gate (Level 0)
+        run: npm run gate -- L0
