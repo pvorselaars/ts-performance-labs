@@ -15,7 +15,7 @@ levels/<level>/exercises/<id>/
     workload.ts      the deliberately slow/broken implementation. Exports `workload(): number` (returns the checksum).
     spec.ts          exports `spec: LabSpec` — the single source of truth for budgets and checksum.
     main.ts          two lines, identical in every exercise and solution (copy it from L0-01).
-    package.json     name, "type": "module", and measure/profile scripts (copy from L0-01).
+    package.json     name, "type": "module", and measure/profile scripts (copy from L0-01; only "name" changes, the scripts find the exercise from the folder they run in).
 
 levels/<level>/solutions/<id>/
     SOLUTION.md      what the profile shows, root cause, the fix, "go further" question, further reading.
@@ -27,7 +27,7 @@ That shared `spec.ts` is what guarantees the exercise and its solution are grade
 ### Setting budgets and the checksum
 `spec.ts` exports a `LabSpec`; see [`src/harness-node/lab.ts`](src/harness-node/lab.ts) for what each field means (it's documented). In short:
 - **`expectedChecksum`**: run the *fixed* `workload.ts`, read the value it returns, paste it in. Both the exercise and the solution must produce the same number. Keep it below 2^53 (JavaScript numbers are doubles); for big outputs, hash a string with `hash32`.
-- **`maxMedianMs`**: measure the fixed solution's median time with `npm run lab -- run <id> --solution`, then set the budget with generous headroom. It is in "reference ms" and is scaled per machine (see the README's harness section), so don't chase your own machine's exact number. Leave at least 3× headroom: under load we saw the calibrated ratio drift by up to 1.8×, and the harness cannot always tell. The budget must still be *below* the slow version's time on a fast machine.
+- **`maxMedianMs`**: measure the fixed solution's median time with `npm run lab -- run <id> --solution`, then set the budget with generous headroom. The run prints that median in "reference ms" too, which is the unit the budget is written in (`npm run lab -- calibrate` shows your machine's factor on its own). Budgets are scaled per machine (see the README's harness section), so don't chase your own machine's exact number. Leave at least 3× headroom: under load we saw the calibrated ratio drift by up to 1.8×, and the harness cannot always tell. The budget must still be *below* the slow version's time on a fast machine.
 - **`maxAllocatedMB`**: same idea, but **not** scaled. It is counted with V8's sampling profiler, and V8 can optimise away allocations that never escape, so measure the solution warmed up (the harness does) and leave headroom.
 - Only set `maxRetainedMB` or `reset` if the exercise's specific lesson needs that gate.
 

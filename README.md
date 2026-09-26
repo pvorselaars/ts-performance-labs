@@ -1,10 +1,10 @@
-# TypeScript/Angular performance, basics to mastery
+# Basics to mastery
 
 You know the moment: some perfectly reasonable-looking code is quietly eating a gigabyte of RAM, freezing the tab for half a second on every keystroke, or stalling your Node service for everyone at once, and you have no idea why yet. This lab exists to give you that moment on purpose, somewhere safe — a profiler, a stopwatch, and nobody paging you at 3 a.m.
 
 It's a self-study lab of small, deliberately broken programs. Each one hands you a **symptom**, not a diagnosis ("this feed takes 180 ms to build," never "this is doing quadratic array inserts"), plus a built-in load driver, a pass/fail budget, progressive hints, and a solution write-up for afterwards. You go find the problem yourself with a real profiler — whichever one you've got — fix it, and the harness tells you two things: did you actually make it faster, and did you keep the output correct. No credit for a fast wrong answer.
 
-It is the TypeScript/Angular sibling of [C# Performance Labs](https://github.com/pvorselaars/csharp-performance-labs) and shares its method: 
+It is the TypeScript sibling of [C# Performance Labs](https://github.com/pvorselaars/csharp-performance-labs) and shares its method: 
 
 > measure → profile → hypothesise → experiment → re-measure.
 
@@ -54,10 +54,10 @@ Some terms below (GC, tiering, retained memory) won't mean much yet if you're br
 
 - **Exit code:** `0` pass · `1` over budget · `2` wrong result (checksum mismatch — a fast wrong answer doesn't count) · `3` inconclusive (see "noisy machine").
 - **Two budgets today.** *Median time* and *allocated MB*. Some exercises add *retained MB* (still reachable after a full GC). Level-specific budgets (event-loop delay, bundle size, change-detection ticks) arrive with the levels that need them.
-- **Time budgets are scaled to your machine.** They're written in "reference ms" (measured on a slow box). The harness times a fixed CPU loop and scales the budget so a fast laptop can't pass by accident. Set `PERFLAB_NO_SCALE=1` to see unscaled budgets.
+- **Time budgets are scaled to your machine.** They're written in "reference ms" (measured on the reference machine, whose calibration loop takes 27 ms). The harness times a fixed CPU loop and scales the budget so a fast laptop can't pass by accident. `npm run lab -- calibrate` prints your machine's factor (how many ms here one reference ms takes). Set `PERFLAB_NO_SCALE=1` to see unscaled budgets.
 - **Allocation is counted, not guessed.** V8 has no "total bytes allocated" counter, so the harness uses V8's sampling heap profiler in a separate, untimed pass (it slows the code down far too much to time). Two consequences: allocation budgets are absolute and machine-independent, and V8's optimiser can delete an allocation that never escapes a loop, so an exercise can honestly show 0 MB.
 - **Noisy machine (a heuristic, not a guarantee).** Scaling only corrects a machine that is *uniformly* slower. Under background load the calibration loop and your workload slow down by different amounts: on the author's machine the time-to-calibration ratio was rock-steady idle (0.1–0.9% variation) but drifted between 0.4× and 1.8× of that under 20 busy loops. The harness watches the calibration loop's own variation, and if it is over 3% it says so, skips the time budget and exits `3` instead of guessing (`PERFLAB_FORCE_TIME=1` overrides). But that check only caught 1 of 7 loaded runs in our test, so **close other programs before trusting a time verdict**, and rely on budgets with generous headroom.
-- **Core pinning (Linux).** `npm run lab` runs exercises pinned to one thread on each of up to four of your fastest physical cores, which reduced the drift under load (from 0.4×–1.8× of the idle ratio to a steady ~0.6×) but did not remove it. `--no-pin` or `PERFLAB_PIN=0` turns it off. Windows and macOS: not pinned.
+- **Core pinning (Linux, Windows).** `npm run lab` runs exercises pinned to one thread on each of up to four of your fastest physical cores, which reduced the drift under load (from 0.4×–1.8× of the idle ratio to a steady ~0.6×) but did not remove it. `--no-pin` or `PERFLAB_PIN=0` turns it off. On Windows the cores are picked by a heuristic (the first thread of each hyperthreaded core, which on Intel hybrid CPUs are the P-cores) and pinned with `start /affinity`; the numbers above were measured on Linux. macOS has no API for pinning, so it runs unpinned.
 - **Warm-up.** V8 starts in an interpreter and tiers hot code up on a background thread, so the harness warms up by time as well as by count, and forces a GC before each timed run so the heap state is the same every time.
 - **A debugger or profiler flag attached** while measuring: the numbers are meaningless, and the harness warns you.
 

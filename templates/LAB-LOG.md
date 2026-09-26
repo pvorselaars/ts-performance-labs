@@ -4,7 +4,7 @@ Copy the template per attempt. It looks like busywork; it isn't. The value is in
 your intuition actually gets calibrated. Be honest about wrong guesses; a log that only records the guesses you got right isn't teaching you anything.
 
 ```
-## L?-?? name — date
+## L?-?? name, date
 
 #### Prediction
 

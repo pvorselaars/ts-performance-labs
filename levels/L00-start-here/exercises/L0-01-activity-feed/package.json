@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "measure": "node ../../../../src/lab-cli/cli.ts run L0-01",
-    "profile": "node ../../../../src/lab-cli/cli.ts profile L0-01"
+    "measure": "node ../../../../src/lab-cli/cli.ts run",
+    "profile": "node ../../../../src/lab-cli/cli.ts profile"
   }
 }
