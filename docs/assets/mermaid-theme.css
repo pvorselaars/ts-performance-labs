@@ -1,0 +1,11 @@
+/* Series colours for Mermaid xy charts, per Material colour scheme. Custom properties inherit into the closed shadow
+   root Material renders each diagram in, which ordinary CSS can't reach; docs/assets/mermaid-theme.js uses them there.
+   Categorical slots 1-5, each stepped for its surface (checked against #fff and Material's slate background). */
+[data-md-color-scheme="default"] {
+  --perflab-series-1: #2a78d6; --perflab-series-2: #eb6834; --perflab-series-3: #1baf7a; --perflab-series-4: #eda100;
+  --perflab-series-5: #e87ba4;
+}
+[data-md-color-scheme="slate"] {
+  --perflab-series-1: #3987e5; --perflab-series-2: #d95926; --perflab-series-3: #199e70; --perflab-series-4: #c98500;
+  --perflab-series-5: #d55181;
+}

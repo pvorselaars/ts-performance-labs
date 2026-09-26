@@ -37,6 +37,14 @@ theme:
 plugins:
   - search
 
+# Mermaid is loaded here (Material would otherwise fetch the same file itself) so mermaid-theme.js can add the
+# dark-mode rules Material's own Mermaid theming lacks for xy charts.
+extra_css:
+  - docs/assets/mermaid-theme.css
+extra_javascript:
+  - https://unpkg.com/mermaid@11/dist/mermaid.min.js
+  - docs/assets/mermaid-theme.js
+
 markdown_extensions:
   - toc:
       permalink: true
@@ -44,7 +52,11 @@ markdown_extensions:
   - fenced_code
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 # This is a code repo, not a docs/ folder: docs_dir is the repo root so every
 # README.md, HINTS.md and SOLUTION.md is picked up in place and relative links
