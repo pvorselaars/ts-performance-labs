@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { availableParallelism } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,12 +37,19 @@ export function resolveProject(idPrefix: string, kind: Project['kind']): Project
 }
 
 /**
- * Linux only: pin to one thread per physical core, fastest cores only (skips the E-cores on hybrid CPUs and the
- * hyperthread siblings), up to 4. Measured on a hybrid i7: under background load the calibration loop's run-to-run
- * variation went from 15% unpinned to ~3% pinned. Disable with PERFLAB_PIN=0.
+ * Pin to one thread per physical core, fastest cores only (skips the E-cores on hybrid CPUs and the hyperthread
+ * siblings), up to 4. Measured on a hybrid i7 (Linux): under background load the calibration loop's run-to-run
+ * variation went from 15% unpinned to ~3% pinned. Linux and Windows; macOS has no API for it. Disable with PERFLAB_PIN=0.
+ * Returns the logical CPU numbers, e.g. "0,2,4,6", or null for "don't pin".
  */
 export function pinCpus(): string | null {
-  if (process.platform !== 'linux' || process.env.PERFLAB_PIN === '0') return null;
+  if (process.env.PERFLAB_PIN === '0') return null;
+  if (process.platform === 'linux') return linuxCpus();
+  if (process.platform === 'win32') return windowsCpus ??= findWindowsCpus();
+  return null;
+}
+
+function linuxCpus(): string | null {
   if (spawnSync('taskset', ['--version']).status !== 0) return null;
   const r = spawnSync('lscpu', ['-e=CPU,CORE,MAXMHZ'], { encoding: 'utf8', env: { ...process.env, LC_ALL: 'C' } });
   if (r.status !== 0) return null;
@@ -56,17 +64,57 @@ export function pinCpus(): string | null {
   return cpus.length ? cpus.join(',') : null;
 }
 
+let windowsCpus: string | null | undefined;   // cached: the PowerShell query takes about a second
+
+/**
+ * Windows reports no per-core speed without P/Invoke, so this is a heuristic: logical CPUs 2k and 2k+1 are the two
+ * threads of one core, and the hyperthreaded cores come first. On Intel hybrid CPUs only the P-cores are
+ * hyperthreaded and Windows numbers them first, so "the first thread of each hyperthreaded core" is the P-cores.
+ * No hyperthreading at all (logical == physical): CPUs 0-3. Anything unexpected: don't pin.
+ */
+function findWindowsCpus(): string | null {
+  const r = spawnSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command',
+    '(Get-CimInstance Win32_Processor | Measure-Object -Property NumberOfCores -Sum).Sum'], { encoding: 'utf8' });
+  const cores = Number(r.stdout?.trim()), logical = availableParallelism();
+  if (r.status !== 0 || !Number.isInteger(cores) || cores <= 0 || cores > logical || logical > 64) return null;
+  const smtCores = logical - cores;
+  const cpus = smtCores > 0
+    ? Array.from({ length: Math.min(4, smtCores) }, (_, i) => 2 * i)
+    : Array.from({ length: Math.min(4, cores) }, (_, i) => i);
+  return cpus.join(',');
+}
+
+/**
+ * Wrap a node command line so it runs pinned: `taskset -c` on Linux, `start /affinity <hex mask>` on Windows.
+ * On Windows `start /b /wait` keeps the child in this console and hands its exit code back through cmd.
+ * Caveat: a spawnSync timeout kills cmd there, not the node child under it.
+ */
+function pinned(cpus: string, node: string[]): { cmd: string; args: string[]; verbatim: boolean } {
+  if (process.platform !== 'win32') return { cmd: 'taskset', args: ['-c', cpus, ...node], verbatim: false };
+  const mask = cpus.split(',').reduce((m, c) => m | (1n << BigInt(c)), 0n).toString(16);
+  const line = `start "" /b /wait /affinity ${mask} ${node.map(a => `"${a}"`).join(' ')}`;
+  return { cmd: 'cmd.exe', args: ['/d', '/s', '/c', `"${line}"`], verbatim: true };
+}
+
 export interface SpawnOptions { nodeFlags?: string[]; harnessArgs?: string[]; pin?: boolean; quiet?: boolean; timeoutMs?: number }
 
-/** Run a project's main.ts in a child node (pinned on Linux). Returns the child's exit code (124 = timed out). */
+/** Run a project's main.ts in a child node (pinned on Linux and Windows). Returns the child's exit code (124 = timed out). */
 export function runProject(p: Project, o: SpawnOptions = {}): number {
-  const cpus = o.pin === false ? null : pinCpus();
-  const node = [process.execPath, ...(o.nodeFlags ?? []), join(p.dir, 'main.ts'), ...(o.harnessArgs ?? [])];
-  const [cmd, ...args] = cpus ? ['taskset', '-c', cpus, ...node] : node;
-  const r = spawnSync(cmd!, args, {
+  return runScript(join(p.dir, 'main.ts'), o);
+}
+
+/** Run a script in a child node, pinned like the exercises. Returns the child's exit code (124 = timed out). */
+export function runScript(file: string, o: SpawnOptions = {}): number {
+  const node = [process.execPath, ...(o.nodeFlags ?? []), file, ...(o.harnessArgs ?? [])];
+  // cmd.exe can't safely quote an argument that contains a quote: run those unpinned.
+  let cpus = o.pin === false ? null : pinCpus();
+  if (cpus && process.platform === 'win32' && node.some(a => a.includes('"'))) cpus = null;
+  const { cmd, args, verbatim } = cpus ? pinned(cpus, node) : { cmd: node[0]!, args: node.slice(1), verbatim: false };
+  const r = spawnSync(cmd, args, {
     stdio: o.quiet ? 'ignore' : 'inherit',
     cwd: repoRoot,
     timeout: o.timeoutMs,
+    windowsVerbatimArguments: verbatim,
     env: { ...process.env, ...(cpus ? { PERFLAB_PINNED: cpus } : {}) },
   });
   if (r.error && (r.error as NodeJS.ErrnoException).code === 'ETIMEDOUT') return 124;

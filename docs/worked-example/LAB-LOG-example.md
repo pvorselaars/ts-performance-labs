@@ -8,7 +8,7 @@ Copy of the template from `templates/LAB-LOG.md`, completed for L0-01. Compare w
 Something quadratic, given "one simple operation per item". Each time I double the item count I expect about 4× the time. Going from 60k to 240k items: 16×.
 
 #### Baseline
-177 ms / 4.0 MB allocated   (budget 50 ref-ms ≈ 15 ms on this machine → FAIL; allocation 4.0 of 8 MB → PASS)
+177 ms / 4.0 MB allocated   (budget 15 ref-ms ≈ 15 ms on this machine → FAIL; allocation 4.0 of 8 MB → PASS)
 
 #### Profiler + mode
 `--cpu-prof` (V8 sampling profiler), via `npm run lab -- profile L0-01 --cpu-prof`

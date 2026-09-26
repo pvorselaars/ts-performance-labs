@@ -10,7 +10,7 @@ export interface LabSpec {
   name: string;
   /** What the *fixed* workload returns. A fast wrong answer doesn't count. Keep it below 2^53 (use {@link hash32} for big outputs). */
   expectedChecksum: number;
-  /** Median time budget in "reference ms": measured on a slow box, scaled to yours by the calibration loop. */
+  /** Median time budget in "reference ms": measured on the reference machine, scaled to yours by the calibration loop. */
   maxMedianMs: number;
   /** Allocation budget in MB. Absolute, never scaled. Counted by V8's sampling heap profiler in a separate, untimed pass. */
   maxAllocatedMB: number;
@@ -60,7 +60,7 @@ export async function runFromDir(dir: string, args: string[]): Promise<number> {
 export function hash32(s: string): number {
   let h = 0x811c9dc5;
   for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
-  return h >>> 0;
+  return h;
 }
 
 // ---- measure ---------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ async function runMeasure(ex: Exercise): Promise<number> {
   console.log(cal.factor === 1
     ? 'Time budgets: unscaled.'
     : `Machine factor ${cal.factor.toFixed(2)}x vs. reference (budget ${ex.maxMedianMs} ms -> ${timeBudget.toFixed(1)} ms on this machine, calibration cv ${(cal.cv * 100).toFixed(1)}%).`);
-  if (cal.noisy) console.log('!! Noisy machine: the calibration loop varied too much to trust a time budget. Close other programs; on Linux run through `npm run lab` (it pins to isolated cores).');
+  if (cal.noisy) console.log('!! Noisy machine: the calibration loop varied too much to trust a time budget. Close other programs; on Linux and Windows run through `npm run lab` (it pins to isolated cores).');
   console.log();
 
   const times: number[] = [], retained: number[] = [];
@@ -108,7 +108,7 @@ async function runMeasure(ex: Exercise): Promise<number> {
   const timeOk = medMs <= timeBudget, allocOk = allocMb <= ex.maxAllocatedMB;
   const skipTime = cal.noisy && process.env.PERFLAB_FORCE_TIME !== '1';
   console.log();
-  console.log(`median time : ${medMs.toFixed(1).padStart(9)} ms   budget ${timeBudget.toFixed(1).padStart(8)} ms   ${skipTime ? 'SKIPPED (noisy machine)' : timeOk ? 'PASS' : 'FAIL'}`);
+  console.log(`median time : ${medMs.toFixed(1).padStart(9)} ms   budget ${timeBudget.toFixed(1).padStart(8)} ms   ${skipTime ? 'SKIPPED (noisy machine)' : timeOk ? 'PASS' : 'FAIL'}   (= ${(medMs / cal.factor).toFixed(1)} reference ms)`);
   console.log(`alloc       : ${allocMb.toFixed(2).padStart(9)} MB   budget ${ex.maxAllocatedMB.toFixed(2).padStart(8)} MB   ${allocOk ? 'PASS' : 'FAIL'}`);
   let retOk = true;
   if (ex.maxRetainedMB !== undefined) {
@@ -201,7 +201,7 @@ function runProfile(ex: Exercise, seconds: number): number {
 // variation (cv) is above 3% the time budget is skipped instead of guessed at. This is a heuristic: measured on a
 // busy 20-thread box the time/calibration ratio drifted 0.4x-1.8x of its idle value while the cv stayed under 4% in
 // 6 of 7 runs. Budgets therefore need real headroom (CONTRIBUTING.md says 3x).
-const ReferenceSpinMs = 90.0;
+const ReferenceSpinMs = 27.0;
 const NoisyCv = 0.03;
 let sink = 0;
 
@@ -209,6 +209,21 @@ function spin(): number {
   let x = 88172645 | 0, acc = 0;
   for (let i = 0; i < 20_000_000; i++) { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; acc += x & 0xff; }
   return acc;
+}
+
+/**
+ * `npm run lab -- calibrate`: print this machine's factor, i.e. how many ms here one reference ms takes.
+ * Exit 3 if the calibration loop was too noisy to trust.
+ */
+export function printCalibration(): number {
+  const pinned = process.env.PERFLAB_PINNED ? `, pinned to CPUs ${process.env.PERFLAB_PINNED}` : '';
+  console.log(`Runtime: Node ${process.version}, V8 ${process.versions.v8}${pinned}`);
+  if (process.env.PERFLAB_NO_SCALE === '1') { console.log('PERFLAB_NO_SCALE=1: scaling is off, so 1 reference ms = 1 ms here.'); return 0; }
+  const cal = calibrate();
+  console.log(`Calibration loop: ${(cal.factor * ReferenceSpinMs).toFixed(1)} ms here, ${ReferenceSpinMs} ms on the reference machine (cv ${(cal.cv * 100).toFixed(1)}%).`);
+  console.log(`Machine factor ${cal.factor.toFixed(2)}x: 1 reference ms = ${cal.factor.toFixed(2)} ms here, so divide a median measured here by ${cal.factor.toFixed(2)} to get reference ms.`);
+  if (cal.noisy) { console.log('!! Noisy machine: the calibration loop varied too much to trust this factor. Close other programs and try again.'); return 3; }
+  return 0;
 }
 
 function calibrate(): { factor: number; cv: number; noisy: boolean } {

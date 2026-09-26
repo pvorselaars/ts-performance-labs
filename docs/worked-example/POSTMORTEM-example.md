@@ -3,10 +3,10 @@
 You won't write one of these until Level 7, but here is the template completed for a small, real-shaped incident, so the format is familiar.
 (Fictional service; the defect is the one from L0-01. The numbers are invented for illustration.)
 
-## Feed page slow for power users — 2026-09-21
+## Feed page slow for power users, 2026-09-21
 
 #### Summary
-The notifications page for accounts with large histories took seconds to load. Median users were unaffected. About 1% of accounts, all of them the heaviest users.
+The notifications page for accounts with large histories took seconds to load. Median users were unaffected. About 1% of accounts were, all of them the heaviest users.
 
 #### Impact
 p50 40 ms (unchanged); p99 2.4 s (was 90 ms last month); no errors. One CPU core pegged per slow request, and the Node event loop stalled for everyone else on that instance while it ran.
