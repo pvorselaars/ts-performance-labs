@@ -1,6 +1,6 @@
 # Roadmap
 
-If you just want to get going, the [top-level README](README.md) has the quick start. This file is the detailed map: what each level teaches, what's built versus still just a sketch, and why the order is what it is.
+If you just want to get going, the [README](README.md) has the quick start. This file is the detailed map: what each level teaches, what's built versus still just a sketch, and why the order is what it is.
 
 One sequence of **fifteen levels (0–14)**:
 
@@ -11,7 +11,7 @@ Books, articles and docs per level: [docs/READING-LIST.md](docs/READING-LIST.md)
 
 **Status legend:**
 
-- ✅ built and verified (slow version fails its budgets, fixed version passes, same checksum)
+- ✅ built and verified
 - 🛠️ being built
 - 📐 designed
 - 💡 idea
@@ -31,7 +31,7 @@ Books, articles and docs per level: [docs/READING-LIST.md](docs/READING-LIST.md)
 | 10    | Angular: rendering & layout               | DevTools Performance panel, INP                   | planned   | planned    | 📐     |
 | 11    | RxJS & state                              | leak snapshots, request counts                    | planned   | planned    | 💡     |
 | 12    | Data, HTTP & caching                      | network + counters                                | planned   | planned    | 💡     |
-| 13    | Build & delivery                          | `--stats-json`, Lighthouse                        | planned   | —          | 💡     |
+| 13    | Build & delivery                          | `--stats-json`, Lighthouse                        | planned   | planned   | 💡     |
 | 14    | Angular: production capstones             | everything                                        | planned   | (the whole level) | 💡 |
 
 *"Profiling skill" names the capability you need, not a specific product, see [docs/PROFILING-GUIDE.md](docs/PROFILING-GUIDE.md) for which tools give you each one.*
@@ -53,4 +53,4 @@ These are the ideas behind the sketches, not promises about specific exercises.
 - **12 Data, HTTP & caching.** Interceptor overhead, request de-duplication, cache headers.
 - **13 Build & delivery.** Lazy routes, preloading, size budgets, SSR/hydration cost.
 
-**How to work through it:** in order, 0 → 14, once they exist. Each level ends with a **final boss fight**: a disguised combination of that level's defects with no per-defect hints (Levels 7 and 14 *are* boss levels). Each level has a **mastery checkpoint**: something to do *without notes* before moving on.
+**How to work through it:** in order, 0 -> 14, once they exist. Each level ends with a **final boss fight**: a disguised combination of that level's defects with no per-defect hints (Levels 7 and 14 *are* boss levels). Each level has a **mastery checkpoint**: something to do *without notes* before moving on.

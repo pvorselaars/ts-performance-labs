@@ -1,6 +1,8 @@
-# L0-01 · Activity feed  (the worked example)
+# L0-01 - Activity feed
 
-> **This is Level 0: a complete, already-worked exercise.** Do it once *with* [`docs/worked-example/`](../../../../docs/worked-example/README.md)
+*Training wheels*
+
+> **This is Level 0: a complete, already worked exercise.** Do it once *with* [`docs/worked-example/`](../../../../docs/worked-example/README.md)
 > open beside you, to see what a finished attempt looks like: every template filled in. Then start Level 1 and fill in your own.
 
 ## Symptom
@@ -28,4 +30,4 @@ npm run lab -- profile L0-01 --cpu-prof
 - Stuck? `HINTS.md`, one hint at a time. Solution: `levels/L00-start-here/solutions/L0-01-activity-feed/`, only after you pass.
 
 ## Extra credit
-Change the count to 240,000 (in a scratch copy; the checksum will no longer match, so just time it). Predict first: 4×, 16×, or more? Then measure. What does the answer tell you about the algorithm, and about the cache?
+Change the count to 240,000 (in a scratch copy; the checksum will no longer match, so just time it). Predict first: 4x, 16x, or more? Then measure. What does the answer tell you about the algorithm, and about the cache?

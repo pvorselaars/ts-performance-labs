@@ -2,7 +2,7 @@
 
 Organised by level, matching [ROADMAP.md](../ROADMAP.md). Read **just in time**: attempt the exercise first, then read. Citations are IEEE-style, numbered continuously; the full list is in [References](#references) at the end.
 
-Only Level 0 is written so far. The later sections are placeholders that fill in as each level is built, so this list never points at reading for exercises that don't exist yet. All links returned HTTP 200 when checked on 2026-09-21.
+Only Level 0 is written so far. The later sections are placeholders that fill in as each level is built.
 
 ## The core shelf
 
@@ -12,7 +12,7 @@ Only Level 0 is written so far. The later sections are placeholders that fill in
 | [[2]](#ref2) | Grigorik, *High Performance Browser Networking* | How the network actually behaves under a browser; free online | 5, 12, 13 |
 | [[3]](#ref3) | The V8 blog | First-hand explanations from the engine's authors: arrays, objects, GC, the compilers | 0, 2, 3, 6 |
 
-## Level 0 — Foundations
+## Level 0: Foundations
 Goal: know what the runtime is doing to your code, and how to look at it, before you start looking for problems.
 
 - [[4]](#ref4) — V8's young-generation and full garbage collections: why one is cheap and the other is not. Needed for the Level 0 checkpoint.
@@ -24,16 +24,16 @@ Goal: know what the runtime is doing to your code, and how to look at it, before
 - [[14]](#ref14), [[15]](#ref15) — what a flame graph is and how to read one; a viewer that opens `.cpuprofile` files.
 - [[20]](#ref20) — amortised analysis of dynamic arrays, the background to why `unshift` in a loop is quadratic and `push` is not (the L0-01 solution's further reading).
 
-## Level 1 — Obvious hot spots
+## Level 1: Obvious hot spots
 *Not written yet.*
 
-## Level 2 — Allocations & GC pressure
+## Level 2: Allocations & GC pressure
 *Not written yet. Likely starts from* [[16]](#ref16) *and* [[17]](#ref17).
 
-## Levels 3–8 — Leaks, event loop, libraries, runtime effects, boss fights, CLI-only labs
+## Levels 3-8: Leaks, event loop, libraries, runtime effects, boss fights, CLI-only labs
 *Not written yet.*
 
-## Levels 9–14 — Angular
+## Levels 9-14: Angular
 *Not written yet. Likely first entries:* [[18]](#ref18), [[19]](#ref19).
 
 ## References

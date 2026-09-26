@@ -107,19 +107,32 @@ async function runMeasure(ex: Exercise): Promise<number> {
   const medMs = median(times);
   const timeOk = medMs <= timeBudget, allocOk = allocMb <= ex.maxAllocatedMB;
   const skipTime = cal.noisy && process.env.PERFLAB_FORCE_TIME !== '1';
+  const refMs = `= ${(medMs / cal.factor).toFixed(1)} reference ms`;
   console.log();
-  console.log(`median time : ${medMs.toFixed(1).padStart(9)} ms   budget ${timeBudget.toFixed(1).padStart(8)} ms   ${skipTime ? 'SKIPPED (noisy machine)' : timeOk ? 'PASS' : 'FAIL'}   (= ${(medMs / cal.factor).toFixed(1)} reference ms)`);
-  console.log(`alloc       : ${allocMb.toFixed(2).padStart(9)} MB   budget ${ex.maxAllocatedMB.toFixed(2).padStart(8)} MB   ${allocOk ? 'PASS' : 'FAIL'}`);
+  row('metric', 'value', 'budget', 'unit', 'result');
+  if (skipTime) row('median time', medMs.toFixed(2), timeBudget.toFixed(2), 'ms', 'SKIP', `noisy machine; ${refMs}`);
+  else print('median time', medMs, timeBudget, 'ms', timeOk, 2, refMs);
+  print('median alloc', allocMb, ex.maxAllocatedMB, 'MB', allocOk);
   let retOk = true;
   if (ex.maxRetainedMB !== undefined) {
     const r = median(retained); retOk = r <= ex.maxRetainedMB;
-    console.log(`median kept : ${r.toFixed(2).padStart(9)} MB   budget ${ex.maxRetainedMB.toFixed(2).padStart(8)} MB   ${retOk ? 'PASS' : 'FAIL'}   (still reachable after a full GC)`);
+    print('median kept', r, ex.maxRetainedMB, 'MB', retOk, 2, 'still reachable after a full GC');
   }
 
   if (!allocOk || !retOk || (!skipTime && !timeOk)) { console.log('\nRESULT: over budget - keep profiling.'); return 1; }
   if (skipTime) { console.log('\nRESULT: INCONCLUSIVE - everything else passed, but the time budget could not be checked on this noisy machine.'); return 3; }
   console.log('\nRESULT: PASS');
   return 0;
+}
+
+/** Prints one result row: the median value against its budget, and PASS/FAIL. */
+function print(name: string, value: number, budget: number, unit: string, ok: boolean, digits = 2, note?: string): void {
+  row(name, value.toFixed(digits), budget.toFixed(digits), unit, ok ? 'PASS' : 'FAIL', note);
+}
+
+// The header and every result row go through here, so the columns always line up.
+function row(metric: string, value: string, budget: string, unit: string, result: string, note?: string): void {
+  console.log(`${metric.padEnd(14)} ${value.padStart(10)} ${budget.padStart(10)}  ${unit.padEnd(4)} ${result.padEnd(6)}${note === undefined ? '' : `(${note})`}`.trimEnd());
 }
 
 /**
