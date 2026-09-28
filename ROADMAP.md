@@ -7,7 +7,7 @@ One sequence of **fifteen levels (0–14)**:
 - **Levels 0–8, the runtime:** CPU, allocation, GC, memory, event loop, libraries, V8 effects, production tooling. Plain TypeScript on Node, no browser needed.
 - **Levels 9–14, Angular:** the same skills in a browser, where new failure modes appear (change-detection storms, layout thrash, long tasks hurting INP, DOM and subscription leaks, bundle weight).
 
-Books, articles and docs per level: [docs/READING-LIST.md](docs/READING-LIST.md). Every level lives in its own folder under [`levels/`](levels/), with its own README. Runtime: **Node 22.18+**; Angular levels target the current Angular release at the time they're built.
+Books, articles and docs per level: [docs/READING-LIST.md](docs/READING-LIST.md). Every level lives in its own folder under [`labs/`](labs/), with its own README. Runtime: **Node 22.18+**; Angular levels target the current Angular release at the time they're built.
 
 **Status legend:**
 
@@ -54,3 +54,26 @@ These are the ideas behind the sketches, not promises about specific exercises.
 - **13 Build & delivery.** Lazy routes, preloading, size budgets, SSR/hydration cost.
 
 **How to work through it:** in order, 0 -> 14, once they exist. Each level ends with a **final boss fight**: a disguised combination of that level's defects with no per-defect hints (Levels 7 and 14 *are* boss levels). Each level has a **mastery checkpoint**: something to do *without notes* before moving on.
+
+## Specializations
+Optional side tracks that branch off the core levels, so the core stays at fifteen. Each track has its own prerequisite level(s) and boss fight, and none is needed to finish Levels 0–14. Planned layout: `specializations/<track>/{exercises,solutions}`.
+
+### Runtime & systems
+| Track                          | Prerequisite | Topics                                                                 | Status |
+|---------------------------------|--------------|-------------------------------------------------------------------------|--------|
+| Observability                   | L8, L13      | OpenTelemetry overhead, log volume, metric cardinality, sampling        | 💡     |
+| Serialization & wire formats    | L2, L5       | schema codegen (`zod`/`io-ts`), streaming JSON parsers, Protobuf/MessagePack | 💡 |
+| Systems design patterns         | L4, L12      | rate limiting, circuit breaker, bulkhead, idempotency, distributed locks, consistent hashing | 💡 |
+| Messaging & background work     | L4, L5       | streams & backpressure, `worker_threads` queues, batching, consumer lag, poison messages | 💡 |
+| Startup, cold start & bundling  | L6, L13      | V8 snapshots & cold start, tiering, ESM vs CJS                          | 💡 |
+| WebSockets & real-time          | L5, L11      | WebSocket/SSE backpressure, multiplexing, reconnection storms, RxJS fan-out | 💡 |
+| gRPC & HTTP/2-3                 | L5           | streaming (server/client/bidi), multiplexing, HPACK header compression, connection/stream limits, proto codegen overhead | 💡 |
+
+### Angular
+| Track                            | Prerequisite | Topics                                                                 | Status |
+|-----------------------------------|--------------|-------------------------------------------------------------------------|--------|
+| Signals & reactivity migration    | L9, L11      | zone.js vs zoneless, `computed`/`effect` overhead, OnPush pitfalls, signal-based inputs/queries | 💡 |
+| SSR & hydration                   | L10, L13     | Angular Universal, hydration mismatches, `TransferState`, incremental/deferred hydration | 💡 |
+| Forms at scale                    | L9           | validators storming change detection, large dynamic form trees, `updateOn` strategies, cross-field validation cost | 💡 |
+| Micro frontends & module federation | L13        | Native Federation, lazy-loaded remotes, duplicate shared deps, cross-remote bundle budgets | 💡 |
+| PWA & offline caching              | L12, L13     | service worker cache strategies, stale-while-revalidate, background sync, update-available storms | 💡 |

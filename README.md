@@ -1,10 +1,10 @@
-# Basics to mastery
+# TS Performance Labs
 
 You know the moment: some perfectly reasonable-looking code is quietly eating a gigabyte of RAM, freezing the tab for half a second on every keystroke, or stalling your Node service for everyone at once, and you have no idea why yet. This lab exists to give you that moment on purpose, somewhere safe, a profiler, a stopwatch, and nobody paging you at 3 a.m.
 
 It's a self-study lab of small, deliberately broken programs. Each one hands you a **symptom**, not a diagnosis ("this feed takes 180 ms to build," never "this is doing quadratic array inserts"), plus a built-in load driver, a pass/fail budget, progressive hints, and a solution write-up for afterwards. You go find the problem yourself with a real profiler — whichever one you've got — fix it, and the harness tells you two things: did you actually make it faster, and did you keep the output correct. No credit for a fast wrong answer.
 
-It is the TypeScript sibling of [C# Performance Labs](https://github.com/pvorselaars/csharp-performance-labs) and shares its method.
+It is the TypeScript sibling of [C# Performance Labs](https://pvorselaars.github.io/csharp-performance-labs/) and shares its method.
 
 **New to performance work?** Start with Level 0. **Already comfortable with V8 internals?** Level 1 is next, once it exists.
 
@@ -30,9 +30,9 @@ flowchart LR
 **Measure** first, always: run the exercise and get a real number before you guess. **Profile** to see where that number actually comes from, not where you assume it does. **Hypothesise** one specific, falsifiable cause, in writing, before touching code. **Experiment** by changing exactly one thing. Then you're back at **Measure**: that's the "re-measure," the same step, run again, to see whether the number actually moved and by how much. Loop until it passes.
 
 ## Status
-**Level 0 is built** (one worked exercise, the harness, the gate, the docs). Levels 1–14 are mapped out in [ROADMAP.md](ROADMAP.md) but not built yet. Reading for each level is in [docs/READING-LIST.md](docs/READING-LIST.md), and grows as levels are written.
+**Level 0 is built** (one worked exercise, the harness, the gate, the docs). Levels 1–14 are mapped out in [ROADMAP.md](ROADMAP.md) but not built yet, along with a set of optional [specialization tracks](ROADMAP.md#specializations) that branch off the core levels. Reading for each level is in [docs/READING-LIST.md](docs/READING-LIST.md), and grows as levels are written.
 
-**Start with [Level 0](docs/worked-example/README.md):** one exercise, already worked — lab log, hints, solution and post-mortem all filled in — so you can see what a finished attempt looks like before you attempt your own.
+**Start with [Level 0](docs/worked-example/README.md):** one exercise, already worked, lab log, hints, solution and post-mortem all filled in, so you can see what a finished attempt looks like before you attempt your own.
 
 ## Setup
 - **Node.js 22.18 or newer** (`.nvmrc` says 22). Exercises are plain `.ts` files that Node runs directly by stripping the types, so there is no build step. `npm install` only fetches TypeScript for type-checking.
@@ -57,7 +57,7 @@ npm run lab -- cold L0-01                  # no warm-up: watch V8 tier up
 ```
 `<id>` can be any unique prefix. Add `--solution` to run the answer key. Each exercise folder also has a `package.json` with `measure` and `profile` scripts, so an IDE's npm panel picks them up.
 
-To attach your own profiler to a process, run the entry file directly: `node levels/L00-start-here/exercises/L0-01-activity-feed/main.ts --profile --seconds 15` (or add `--inspect-brk` and open `chrome://inspect`). That skips the core pinning described below, which is fine for profiling and not for timing.
+To attach your own profiler to a process, run the entry file directly: `node labs/L00-start-here/exercises/L0-01-activity-feed/main.ts --profile --seconds 15` (or add `--inspect-brk` and open `chrome://inspect`). That skips the core pinning described below, which is fine for profiling and not for timing.
 
 ### Running an exercise under a profiler, by tool
 Whatever you're using, the shape is the same: run in **profile** mode (it loops the workload for `--seconds`, default 15, so the profiler gets plenty of samples) and profile it, never debug it. Every exercise folder has two npm scripts in its `package.json`: **measure** (the pass/fail run) and **profile** (the loop). Run from that folder, they find the exercise themselves, so they're identical in every exercise. The **profile** script only loops; add `--cpu-prof` (`npm run profile -- --cpu-prof`) to also write a `.cpuprofile` into `.profiles/`.

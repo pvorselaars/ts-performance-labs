@@ -9,7 +9,7 @@
 Every exercise is a matched pair of folders:
 
 ```
-levels/<level>/exercises/<id>/
+labs/<level>/exercises/<id>/
     README.md        symptom + budgets table — NOT the diagnosis. See L0-01 for the shape.
     HINTS.md         progressive hints, one <details> block per hint, cheapest tool first.
     workload.ts      the deliberately slow/broken implementation. Exports `workload(): number` (returns the checksum).
@@ -17,7 +17,7 @@ levels/<level>/exercises/<id>/
     main.ts          two lines, identical in every exercise and solution (copy it from L0-01).
     package.json     name, "type": "module", and measure/profile scripts (copy from L0-01; only "name" changes, the scripts find the exercise from the folder they run in).
 
-levels/<level>/solutions/<id>/
+labs/<level>/solutions/<id>/
     SOLUTION.md      what the profile shows, root cause, the fix, "go further" question, further reading.
     workload.ts      the fixed implementation — same exports, same checksum as the exercise.
     main.ts          identical to the exercise's. It loads *the exercise's* spec.ts (see `runFromDir` in src/harness-node/lab.ts).
@@ -33,7 +33,7 @@ That shared `spec.ts` is what guarantees the exercise and its solution are grade
 
 The slow (exercise) version must **fail** at least one budget; the fixed (solution) version must **pass all of them**, with an identical checksum. That pairing is what `npm run gate` checks automatically. Also do the real work by hand first: profile the slow version and confirm the profile shows what your `SOLUTION.md` says it shows. Write down measured numbers, and mark anything you did not measure as illustrative or unverified.
 
-Then add a row for it to that level's `levels/<level>/README.md` exercise table.
+Then add a row for it to that level's `labs/<level>/README.md` exercise table.
 
 ### Style
 The existing exercises share a voice: the symptom is described in terms of what you'd *observe*, never what's wrong with the code; `README.md` never uses the word "bug"; hints escalate from "which tool" to "which line" without ever just stating the fix. Read L0-01 before writing a new one — matching that voice matters more than matching any template mechanically.

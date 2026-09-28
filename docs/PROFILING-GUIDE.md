@@ -66,7 +66,7 @@ These viewers show time per **function**. For the hot **line**, run `npm run lab
 `--cpu-prof-interval=<µs>` (a plain `node` flag, see `node --help`) changes the sampling interval.
 
 ### Chrome DevTools attached to Node
-1. `node --inspect-brk levels/L00-start-here/exercises/L0-01-activity-feed/main.ts --profile --seconds 15`
+1. `node --inspect-brk labs/L00-start-here/exercises/L0-01-activity-feed/main.ts --profile --seconds 15`
 2. Open `chrome://inspect`, click **inspect** on the target
 3. For memory: take heap snapshots at different points, use the **Comparison** view, then look at **Retainers**.
 
@@ -82,6 +82,6 @@ Chrome DevTools Performance panel on a running app, Angular DevTools' profiler, 
 
 ### Other CLI tools
 ```bash
-node --trace-gc levels/L00-start-here/exercises/L0-01-activity-feed/main.ts --profile --seconds 1
+node --trace-gc labs/L00-start-here/exercises/L00-01-activity-feed/main.ts --profile --seconds 1
 ```
 `--trace-gc` prints one line per garbage collection: the kind (`Scavenge` is the cheap young-generation one; `Mark-Compact` is the full one), heap size before and after, and how long it took. More CLI tools arrive with Level 8 (the CLI-only labs).

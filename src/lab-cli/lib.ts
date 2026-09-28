@@ -11,10 +11,10 @@ export interface Project { id: string; level: string; kind: 'exercise' | 'soluti
 /** Every exercise/solution directory that has a main.ts, sorted by level then id. */
 export function findProjects(): Project[] {
   const out: Project[] = [];
-  const levelsDir = join(repoRoot, 'levels');
-  for (const level of readdirSync(levelsDir).sort()) {
+  const labsDir = join(repoRoot, 'labs');
+  for (const level of readdirSync(labsDir).sort()) {
     for (const [folder, kind] of [['exercises', 'exercise'], ['solutions', 'solution']] as const) {
-      const base = join(levelsDir, level, folder);
+      const base = join(labsDir, level, folder);
       if (!existsSync(base)) continue;
       for (const id of readdirSync(base).sort()) {
         const dir = join(base, id);

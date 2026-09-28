@@ -1,7 +1,7 @@
 name: perf-gate
 on:
   pull_request:
-    paths: ['src/**', 'scripts/**', 'levels/**', 'package.json', 'tsconfig*.json']
+    paths: ['src/**', 'scripts/**', 'labs/**', 'package.json', 'tsconfig*.json']
 jobs:
   gate:
     runs-on: ubuntu-latest        # shared runner: time budgets can be noisy. The harness skips them (exit 3, retried) when its calibration says so; allocation budgets are deterministic.

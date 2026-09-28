@@ -6,7 +6,7 @@ The whole loop, once, with the answers already filled in, so you know what "done
 
 **Mastery checkpoint:** You can say what a good log entry contains and why the hypothesis is written before the fix; you can explain why a young-generation GC (a scavenge) is cheap and a full mark-compact GC is not; you can say what Ignition, Sparkplug and TurboFan each do and why the harness warms up before it times anything (see the [runtime guide](../../docs/RUNTIME.md)).
 
-Run one: `npm run lab -- run L0-01` (expect `FAIL`), work it as described in the [top-level README](../../README.md), and only then open the solution.
+Run one: `npm run lab -- run L00-01` (expect `FAIL`), work it as described in the [top-level README](../../README.md), and only then open the solution.
 
 **Further reading:** [Level 0 reading list](../../docs/READING-LIST.md#level-0-foundations)
 
@@ -17,4 +17,4 @@ Run one: `npm run lab -- run L0-01` (expect `FAIL`), work it as described in the
 ## Exercises
 | Exercise | Topic | Spoiler |
 |---|---|---|
-| [L0-01-activity-feed](exercises/L0-01-activity-feed/README.md) | Activity feed (the worked example) | [solution](solutions/L0-01-activity-feed/SOLUTION.md) |
+| [L00-01-activity-feed](exercises/L00-01-activity-feed/README.md) | Activity feed (the worked example) | [solution](solutions/L00-01-activity-feed/SOLUTION.md) |

@@ -1,14 +1,14 @@
 # Level 0 — a worked example, every template filled in
 
 Use this once, before Level 1, to see the *shape* of a finished attempt — what "done" actually looks like, before you're the one trying to produce it. It uses the exercise
-[`levels/L00-start-here/exercises/L0-01-activity-feed`](../../levels/L00-start-here/exercises/L0-01-activity-feed/README.md). Spoilers below, so **try the exercise first for 15 minutes**, then compare.
+[`../../labs/L00-start-here/exercises/L00-01-activity-feed`](../../labs/L00-start-here/exercises/L00-01-activity-feed/README.md). Spoilers below, so **try the exercise first for 15 minutes**, then compare.
 
 | Template | Where it lives | The filled-in example |
 |---|---|---|
-| Symptom + budgets | exercise `README.md` | [../../levels/L00-start-here/exercises/L0-01-activity-feed/README.md](../../levels/L00-start-here/exercises/L0-01-activity-feed/README.md) |
-| Progressive hints | exercise `HINTS.md` | [../../levels/L00-start-here/exercises/L0-01-activity-feed/HINTS.md](../../levels/L00-start-here/exercises/L0-01-activity-feed/HINTS.md) |
+| Symptom + budgets | exercise `README.md` | [../../labs/L00-start-here/exercises/L0-01-activity-feed/README.md](../../labs/L00-start-here/exercises/L00-01-activity-feed/README.md) |
+| Progressive hints | exercise `HINTS.md` | [../../labs/L00-start-here/exercises/L0-01-activity-feed/HINTS.md](../../labs/L00-start-here/exercises/L00-01-activity-feed/HINTS.md) |
 | Lab-log entry | your `templates/LAB-LOG.md` | [LAB-LOG-example.md](LAB-LOG-example.md) |
-| Solution write-up | `solutions/…/SOLUTION.md` | [../../levels/L00-start-here/solutions/L0-01-activity-feed/SOLUTION.md](../../levels/L00-start-here/solutions/L0-01-activity-feed/SOLUTION.md) |
+| Solution write-up | `solutions/…/SOLUTION.md` | [../../labs/L00-start-here/solutions/L0-01-activity-feed/SOLUTION.md](../../labs/L00-start-here/solutions/L00-01-activity-feed/SOLUTION.md) |
 | Post-mortem (Level 7+ template, shown early) | your `templates/POSTMORTEM.md` | [POSTMORTEM-example.md](POSTMORTEM-example.md) |
 
 ## The loop, at a glance

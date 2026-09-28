@@ -27,7 +27,7 @@ npm run lab -- run L0-01
 ```
 npm run lab -- profile L0-01 --cpu-prof
 ```
-- Stuck? `HINTS.md`, one hint at a time. Solution: `levels/L00-start-here/solutions/L0-01-activity-feed/`, only after you pass.
+- Stuck? `HINTS.md`, one hint at a time. Solution: `../../solutions/L00-01-activity-feed`, only after you pass.
 
 ## Extra credit
 Change the count to 240,000 (in a scratch copy; the checksum will no longer match, so just time it). Predict first: 4x, 16x, or more? Then measure. What does the answer tell you about the algorithm, and about the cache?
