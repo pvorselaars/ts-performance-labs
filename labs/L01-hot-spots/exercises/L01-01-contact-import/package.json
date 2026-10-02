@@ -1,0 +1,9 @@
+{
+  "name": "l01-01-contact-import",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "measure": "node ../../../../src/lab-cli/cli.ts run",
+    "profile": "node ../../../../src/lab-cli/cli.ts profile"
+  }
+}
