@@ -1,0 +1,9 @@
+{
+  "name": "l02-01-customer-totals",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "measure": "node ../../../../src/lab-cli/cli.ts run",
+    "profile": "node ../../../../src/lab-cli/cli.ts profile"
+  }
+}

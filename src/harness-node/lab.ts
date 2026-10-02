@@ -63,6 +63,19 @@ export function hash32(s: string): number {
   return h;
 }
 
+/**
+ * A small seeded PRNG (mulberry32), so every machine generates the same workload data and the checksum stays stable.
+ * Returns `next(n)`: an integer in [0, n).
+ */
+export function createRng(seed: number): (n: number) => number {
+  return (n) => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return Math.floor((((t ^ (t >>> 14)) >>> 0) / 4294967296) * n);
+  };
+}
+
 // ---- measure ---------------------------------------------------------------------------------------------------
 
 const MinWarmupMs = 1000, MaxWarmupRuns = 60;
@@ -107,11 +120,10 @@ async function runMeasure(ex: Exercise): Promise<number> {
   const medMs = median(times);
   const timeOk = medMs <= timeBudget, allocOk = allocMb <= ex.maxAllocatedMB;
   const skipTime = cal.noisy && process.env.PERFLAB_FORCE_TIME !== '1';
-  const refMs = `= ${(medMs / cal.factor).toFixed(1)} reference ms`;
   console.log();
   row('metric', 'value', 'budget', 'unit', 'result');
-  if (skipTime) row('median time', medMs.toFixed(2), timeBudget.toFixed(2), 'ms', 'SKIP', `noisy machine; ${refMs}`);
-  else print('median time', medMs, timeBudget, 'ms', timeOk, 2, refMs);
+  if (skipTime) row('median time', medMs.toFixed(2), timeBudget.toFixed(2), 'ms', 'SKIP', `noisy machine`);
+  else print('median time', medMs, timeBudget, 'ms', timeOk, 2);
   print('median alloc', allocMb, ex.maxAllocatedMB, 'MB', allocOk);
   let retOk = true;
   if (ex.maxRetainedMB !== undefined) {
