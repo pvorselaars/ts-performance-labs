@@ -1,4 +1,4 @@
-# L0-01 - Activity feed
+# L00-01 - Activity feed
 
 *Training wheels*
 
@@ -21,7 +21,7 @@ Same feed (checksum), and:
 - Edit `workload.ts`. Don't edit `spec.ts` (budgets and checksum live there).
 - Run it with 
 ```
-npm run lab -- run L0-01
+npm run lab -- run L01-01
 ```
 - Profile with (see [the profiling guide](../../../../docs/PROFILING-GUIDE.md)).
 ```

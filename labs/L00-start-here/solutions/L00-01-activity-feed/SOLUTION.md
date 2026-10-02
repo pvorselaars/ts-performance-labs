@@ -1,4 +1,4 @@
-# L0-01 - Solution
+# L00-01 - Solution
 
 ## What the profile shows
 Captured with `npm run lab -- profile L0-01 --seconds 4 --cpu-prof` and read from the raw `.cpuprofile` (Node 22.23, V8 12.4):

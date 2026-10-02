@@ -1,4 +1,4 @@
-# Level 0: start here
+# Lab 0: start here
 
 The whole loop, once, with the answers already filled in, so you know what "done" looks like before you're on your own.
 
@@ -8,7 +8,7 @@ The whole loop, once, with the answers already filled in, so you know what "done
 
 Run one: `npm run lab -- run L00-01` (expect `FAIL`), work it as described in the [top-level README](../../README.md), and only then open the solution.
 
-**Further reading:** [Level 0 reading list](../../docs/READING-LIST.md#level-0-foundations)
+**Further reading:** [Lab 0 reading list](../../docs/READING-LIST.md#level-0-foundations)
 
 ## Read alongside
 - [Runtime: how V8 runs your code](../../docs/RUNTIME.md): why the first run is slow, what warm-up is, and how to watch it happen.
